@@ -10,11 +10,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private int health = 3;
-    // [SerializeField] private Text healthText;
-    // [SerializeField] private Text keysText;
+    [SerializeField] private GameUIManager uiManager;
 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private Animator animator;
     private bool isGrounded;
     private int keysCollected = 0;
     private Transform platform;
@@ -24,7 +24,8 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
-        // UpdateUI();
+        animator = GetComponent<Animator>();
+        uiManager.Initialize(health, health);
     }
 
     void Update()
@@ -44,6 +45,12 @@ public class Player : MonoBehaviour
         float move = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(move * moveSpeed, rb.velocity.y);
         sr.flipX = move < 0;
+
+        if (isGrounded)
+        {
+            animator.SetBool("Run", move != 0);
+            animator.SetBool("Idle", move == 0);
+        }
     }
 
     void Jump()
@@ -51,7 +58,9 @@ public class Player : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
         {
             rb.AddForce(jumpForce * Vector2.up, ForceMode2D.Impulse);
-            //rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            animator.SetBool("Jump", true);
+            animator.SetBool("Run", false);
+            animator.SetBool("Idle", false);
         }
     }
 
@@ -60,12 +69,14 @@ public class Player : MonoBehaviour
         if (collision.gameObject.GetComponent<Ground>() != null)
         {
             isGrounded = true;
+            animator.SetBool("Jump", false);
+            animator.SetBool("Fall", false);
         }
 
         if (collision.gameObject.GetComponent<Obstacle>() != null)
         {
             health--;
-            // UpdateUI();
+            uiManager.UpdateHealth(health);
             if (health <= 0)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -84,6 +95,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.GetComponent<Ground>() != null)
         {
             isGrounded = false;
+            animator.SetBool("Fall", true);
         }
 
         if (collision.gameObject.GetComponent<MovingPlatform>() != null)
@@ -97,14 +109,14 @@ public class Player : MonoBehaviour
         if (collision.gameObject.GetComponent<Key>() != null)
         {
             keysCollected++;
-            // UpdateUI();
+            uiManager.UpdateKeys(keysCollected);
             Destroy(collision.gameObject);
         }
 
         if (collision.gameObject.GetComponent<MedKit>() != null)
         {
             health++;
-            // UpdateUI();
+            uiManager.UpdateHealth(health);
             Destroy(collision.gameObject);
         }
 
@@ -113,11 +125,4 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Можно заменить на переход на следующий уровень
         }
     }
-
-    /* void UpdateUI()
-    {
-        healthText.text = "Health: " + health;
-        keysText.text = "Keys: " + keysCollected + "/5";
-    }*/
 }
-    
