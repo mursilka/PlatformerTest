@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Map_Elements;
@@ -120,9 +121,16 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
         }
 
+        if (collision.gameObject.GetComponent<Door>() != null)
+        {
+            Debug.Log("У двери");
+            collision.gameObject.GetComponent<Door>().TryOpenDoor(keysCollected);
+        }
+
         if (collision.gameObject.GetComponent<Finish>() != null && keysCollected >= 5)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Можно заменить на переход на следующий уровень
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                        
         }
     }
 }
