@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private int health = 3;
     [SerializeField] private GameUIManager uiManager;
-
+    [SerializeField] private float repulsiveForce= 10f;
+    
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Animator animator;
@@ -76,6 +77,9 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.GetComponent<Obstacle>() != null)
         {
+            Vector2 oppositeDirection = -rb.velocity.normalized;
+            Vector2 force = oppositeDirection + Vector2.up * repulsiveForce; 
+            rb.AddForce(force , ForceMode2D.Impulse); 
             health--;
             uiManager.UpdateHealth(health);
             if (health <= 0)
@@ -83,12 +87,7 @@ public class Player : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
-
-        if (collision.gameObject.GetComponent<MovingPlatform>() != null)
-        {
-            platform = collision.transform;
-            platformLastPosition = platform.position;
-        }
+       
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -98,11 +97,7 @@ public class Player : MonoBehaviour
             isGrounded = false;
             animator.SetBool("Fall", true);
         }
-
-        if (collision.gameObject.GetComponent<MovingPlatform>() != null)
-        {
-            platform = null;
-        }
+        
     }
 
     void OnTriggerEnter2D(Collider2D collision)

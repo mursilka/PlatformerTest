@@ -47,8 +47,8 @@ public class GameUIManager : MonoBehaviour
         healthText.text = "Health: " + currentHealth;
         if (currentHealth> maxHealth)
         {
-            int _maxHealth = currentHealth;
-            healthBar.fillAmount = (float)currentHealth / _maxHealth;
+            maxHealth= currentHealth;
+            healthBar.fillAmount = (float)currentHealth / maxHealth;
         }
         else
         {

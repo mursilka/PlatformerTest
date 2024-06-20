@@ -7,7 +7,7 @@ public class Door : MonoBehaviour
     [SerializeField] private float loweringSpeed = 2f;
     [SerializeField] private Animator animatorLock;
 
-    private bool isUnlocked = false;
+    
     private bool isLowering = false;
 
     void Start()
@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
     {
         if (keysCollected >= requiredKeys)
         {
-            isUnlocked = true;
+            
             animatorLock.SetTrigger("Open");
         }
     }
