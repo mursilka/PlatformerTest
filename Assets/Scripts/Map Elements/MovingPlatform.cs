@@ -9,7 +9,7 @@ public class MovingPlatform : MonoBehaviour
     private Vector3 targetPosition;
     private bool movingToEndPoint;
 
-    void Start()
+    private void Start()
     {
         if (startPoint != null)
         {
@@ -19,7 +19,7 @@ public class MovingPlatform : MonoBehaviour
         movingToEndPoint = true;
     }
 
-    void Update()
+    private void Update()
     {
         if (startPoint != null && endPoint != null)
         {
@@ -27,7 +27,7 @@ public class MovingPlatform : MonoBehaviour
         }
     }
 
-    void MovePlatform()
+    private void MovePlatform()
     {
         // Движение платформы к целевой позиции
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);

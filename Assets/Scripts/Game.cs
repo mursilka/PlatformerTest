@@ -6,7 +6,7 @@ public class Game : MonoBehaviour
     [SerializeField] private GameUIManager uiManager;
     [SerializeField] private Player player;
 
-    void Start()
+    private void Start()
     {
         // Подписываемся на события игрока
         player.OnHealthChanged += HandleHealthChanged;
@@ -17,7 +17,7 @@ public class Game : MonoBehaviour
         uiManager.Initialize(player.Health, player.KeysCollected);
     }
 
-    void HandleHealthChanged(int health)
+    private void HandleHealthChanged(int health)
     {
         // Обновляем UI здоровья
         uiManager.UpdateHealth(health);
@@ -29,13 +29,13 @@ public class Game : MonoBehaviour
         }
     }
 
-    void HandleKeysChanged(int keys)
+    private void HandleKeysChanged(int keys)
     {
         // Обновляем UI ключей
         uiManager.UpdateKeys(keys);
     }
 
-    void HandlePlayerDeath()
+    private void HandlePlayerDeath()
     {
         // Перезагружаем текущую сцену
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

@@ -30,12 +30,12 @@ public class Player : MonoBehaviour
 
     private IPlayerInput _input; // Интерфейсный тип для ввода
 
-    void Start()
+    private void Start()
     {
         _input = new PlayerInput();
     }
 
-    void Update()
+    private void Update()
     {
         _input.CustomUpdate();
         HandleInput();
@@ -58,12 +58,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Move();
     }
 
-    void HandleInput()
+    private void HandleInput()
     {
         if (_input.IsJump && isGrounded)
         {
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Move()
+    private void Move()
     {
         float move = _input.Horizontal;
         rb.velocity = new Vector2(move * moveSpeed, rb.velocity.y);
@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Jump()
+    private void Jump()
     {
         rb.AddForce(jumpForce * Vector2.up, ForceMode2D.Impulse);
     }
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
         sr.flipX = !sr.flipX;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         // Проверка на слой земли
         if (((1 << collision.gameObject.layer) & groundLayer) != 0)
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
         // Проверка на слой земли
         if (((1 << collision.gameObject.layer) & groundLayer) != 0)
@@ -133,7 +133,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<Key>() != null)
         {
